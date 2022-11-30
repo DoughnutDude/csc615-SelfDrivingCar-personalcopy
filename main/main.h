@@ -67,9 +67,9 @@ volatile unsigned* gpio;
 #define GPIO_PULL *(gpio+37) // Pull up/pull down
 #define GPIO_PULLCLK0 *(gpio+38) // Pull up/pull down clock
 
-void motorSetSpeed(UBYTE, UWORD);
-void motorSetDir(UBYTE, int);
-void motorStop(UBYTE);
+void motorSetSpeed(int, UBYTE, UWORD);
+void motorSetDir(int, UBYTE, int);
+void motorStop(int, UBYTE);
 void setup_io();
 void sysExit(int);
 

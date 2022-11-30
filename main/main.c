@@ -43,15 +43,12 @@ int main(void) {
     GPIO_PULL = 0;
     GPIO_PULLCLK0 = 0;
 
-    printf("waiting for button...\r\n");
-    while (GET_GPIO(PIN_BUTTON) == 0) {//(DEV_Digital_Read(PIN_BUTTON) == 0) {
-    }
-    DEBUG("button pushed, continuing.\r\n");
 
     //2.Motor Initialization
     PCA9685_Init(0x40);
     PCA9685_Init(0x60);
-    PCA9685_SetPWMFreq(100);
+    PCA9685_SetPWMFreq(1, 100);
+    PCA9685_SetPWMFreq(2, 100);
 
     //3.Motor Run
     DEBUG("running it\r\n");
