@@ -269,7 +269,7 @@ void DEV_I2C_Init(int deviceNum, uint8_t Add)
         // printf("DEV I2C Device\r\n");
         char * i2c_device = "/dev/i2c-";
         char * deviceNumAsChar;
-        itoa(deviceNum, deviceNumAsChar, 10);
+        itoa(deviceNum + 1, deviceNumAsChar, 10);
         strcat(i2c_device, deviceNumAsChar);
 
         DEV_HARDWARE_I2C_begin(deviceNum, i2c_device);

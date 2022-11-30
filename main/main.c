@@ -45,8 +45,8 @@ int main(void) {
 
 
     //2.Motor Initialization
-    PCA9685_Init(0x40);
-    PCA9685_Init(0x60);
+    PCA9685_Init(0, 0x40);
+    PCA9685_Init(1, 0x60);
     PCA9685_SetPWMFreq(1, 100);
     PCA9685_SetPWMFreq(2, 100);
 
