@@ -28,7 +28,7 @@
  */
 static void PCA9685_WriteByte(int deviceNum, UBYTE reg, UBYTE value)
 {
-    I2C_Write_Byte(reg, value);
+    I2C_Write_Byte(deviceNum, reg, value);
 }
 
 /**
@@ -41,7 +41,7 @@ static void PCA9685_WriteByte(int deviceNum, UBYTE reg, UBYTE value)
  */
 static UBYTE PCA9685_ReadByte(int deviceNum, UBYTE reg)
 {
-    return I2C_Read_Byte(reg);
+    return I2C_Read_Byte(deviceNum, reg);
 }
 
 /**
