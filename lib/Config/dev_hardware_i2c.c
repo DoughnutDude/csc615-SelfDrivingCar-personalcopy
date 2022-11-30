@@ -84,7 +84,7 @@ function: I2C device End
 parameter:
 Info:
 ******************************************************************************/
-void DEV_HARDWARE_I2C_end(int deviceNum, void)
+void DEV_HARDWARE_I2C_end(int deviceNum)
 {
     if (close(hardware_i2c[deviceNum].fd) != 0){
         perror("Failed to close i2c device.\n");  
