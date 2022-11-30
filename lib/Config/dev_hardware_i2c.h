@@ -54,7 +54,7 @@ typedef struct I2CStruct {
 } HARDWARE_I2C;
 
 void DEV_HARDWARE_I2C_begin(int deviceNum, char *i2c_device);
-void DEV_HARDWARE_I2C_end(int deviceNum, void);
+void DEV_HARDWARE_I2C_end(int deviceNum);
 void DEV_HARDWARE_I2C_setSlaveAddress(int deviceNum, uint8_t addr);
 uint8_t DEV_HARDWARE_I2C_write(int deviceNum, const char * buf, uint32_t len);
 uint8_t DEV_HARDWARE_I2C_read(int deviceNum, uint8_t reg, char* buf, uint32_t len);
