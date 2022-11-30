@@ -32,6 +32,7 @@
 #define __DEV_HARDWARE_I2C_
 
 #include <stdint.h>
+#include <stdlib.h>   //exit()  
 
 
 #define DEV_HARDWARE_I2C_DEBUG 0

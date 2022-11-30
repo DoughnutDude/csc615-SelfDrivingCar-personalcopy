@@ -397,7 +397,8 @@ void DEV_ModuleExit(void)
 
 #elif USE_DEV_LIB
     #if DEV_I2C
-        DEV_HARDWARE_I2C_end();
+        DEV_HARDWARE_I2C_end(1);
+        DEV_HARDWARE_I2C_end(2);
     #endif
     #if DEV_SPI
         DEV_HARDWARE_SPI_end();

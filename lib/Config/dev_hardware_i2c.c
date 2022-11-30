@@ -51,7 +51,6 @@
 #include "dev_hardware_i2c.h"
 
 #include <stdio.h>
-#include <stdlib.h>   //exit()  
 #include <fcntl.h>    //define O_RDWR  
 #include <linux/i2c-dev.h>  
 #include <sys/ioctl.h>
