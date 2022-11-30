@@ -69,6 +69,7 @@ Info:   /dev/i2c-*
 ******************************************************************************/
 void DEV_HARDWARE_I2C_begin(int deviceNum, char *i2c_device)
 {
+    printf("i2c_device: %s\r\n", i2c_device);
     //device
     if((hardware_i2c[deviceNum].fd = open(i2c_device, O_RDWR)) < 0)  { //打开I2C 
         perror("Failed to open i2c device.\n");  

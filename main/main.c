@@ -47,44 +47,44 @@ int main(void) {
     //2.Motor Initialization
     PCA9685_Init(0, 0x40);
     PCA9685_Init(1, 0x60);
+    PCA9685_SetPWMFreq(0, 100);
     PCA9685_SetPWMFreq(1, 100);
-    PCA9685_SetPWMFreq(2, 100);
 
     //3.Motor Run
     DEBUG("running it\r\n");
+    motorSetDir(0, MOTORB, FORWARD);
+    motorSetSpeed(0, MOTORB, 100); //max speed
     motorSetDir(1, MOTORB, FORWARD);
     motorSetSpeed(1, MOTORB, 100); //max speed
-    motorSetDir(2, MOTORB, FORWARD);
-    motorSetSpeed(2, MOTORB, 100); //max speed
     DEV_Delay_ms(2000); //wait for 2 seconds
 
     DEBUG("slowing it down\r\n");
     //gradually slow down to 15%
     for (int i = 100; i >= 15; i--) {
+        motorSetSpeed(0, MOTORB, i);
         motorSetSpeed(1, MOTORB, i);
-        motorSetSpeed(2, MOTORB, i);
         DEV_Delay_ms(50);
     }
     //stop for 1 second
+    motorStop(0, MOTORB);
     motorStop(1, MOTORB);
-    motorStop(2, MOTORB);
     DEV_Delay_ms(1000);
     
     //gradually accelerate to max reverse
+    motorSetDir(0, MOTORB, BACKWARD);
     motorSetDir(1, MOTORB, BACKWARD);
-    motorSetDir(2, MOTORB, BACKWARD);
     for (int j = 0; j <= 100; j++) {
+        motorSetSpeed(0, MOTORB, j);
         motorSetSpeed(1, MOTORB, j);
-        motorSetSpeed(2, MOTORB, j);
         DEV_Delay_ms(50);
     }
     
     //4.System Exit
     printf("\r\nEnd Reached: Motor Stop\r\n");
+    motorStop(0, MOTORA);
+    motorStop(0, MOTORB);
     motorStop(1, MOTORA);
     motorStop(1, MOTORB);
-    motorStop(2, MOTORA);
-    motorStop(2, MOTORB);
     //DEV_GPIO_Unexport(PIN_BUTTON);
     DEV_ModuleExit();
     return 0;
@@ -174,10 +174,10 @@ void setup_io()
 void sysExit(int signo) {
     //System Exit
     printf("\r\nHandler: Motor Stop\r\n");
+    motorStop(0, MOTORA);
+    motorStop(0, MOTORB);
     motorStop(1, MOTORA);
     motorStop(1, MOTORB);
-    motorStop(2, MOTORA);
-    motorStop(2, MOTORB);
     DEV_ModuleExit();
 
     exit(0);
