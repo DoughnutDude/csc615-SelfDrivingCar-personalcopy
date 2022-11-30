@@ -173,6 +173,7 @@ void DEV_Delay_ms(UDOUBLE xms)
 
 void GPIO_Config(void)
 {
+    DEBUG("GPIO config function entered\r\n");
     int Equipment = DEV_Equipment_Testing();
     if(Equipment=='R'){
         INT_PIN = 4;
