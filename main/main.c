@@ -1,0 +1,177 @@
+/**************************************************************
+* Class: CSC-615-01 Fall 2022
+* Team Name: Data Pi-rats
+* Name: Cameron Yee
+* Student ID: 920699179
+* Github ID: DoughnutDude
+* Project: Term Project - Drive On
+*
+* File: main.c
+*
+* Description: Contains the main driving logic
+* Sources referenced: https://www.waveshare.com/wiki/Motor_Driver_HAT
+* https://elinux.org/RPi_GPIO_Code_Samples#Direct_register_access
+*
+**************************************************************/
+
+#include "main.h"
+
+#define PIN_BUTTON 17
+
+int main(void) {
+    //1.System Initialization
+    if (DEV_ModuleInit()) {
+        exit(0);
+    }
+    // Exception handling:ctrl + c
+    signal(SIGINT, sysExit);
+    
+    // Set up gpi pointer for direct register access
+    setup_io();
+
+    // Set GPIO button pin as input
+    INP_GPIO(PIN_BUTTON);
+    //DEV_GPIO_Mode(PIN_BUTTON, 0); //dev config stuff for sysfs GPIO
+
+    DEBUG("setting pulldown: %d\r\n", GPIO_PULL);
+
+    // Set pi GPIO pull to pulldown
+    GPIO_PULL = 1; // set the type of pull we want, 1 = pulldown
+    usleep(10); // wait 150 cycles
+    GPIO_PULLCLK0 = 1<<PIN_BUTTON; // signify which pin which receives the pulldown change
+    usleep(10); // wait 150 cycles
+    GPIO_PULL = 0;
+    GPIO_PULLCLK0 = 0;
+
+    printf("waiting for button...\r\n");
+    while (GET_GPIO(PIN_BUTTON) == 0) {//(DEV_Digital_Read(PIN_BUTTON) == 0) {
+    }
+    DEBUG("button pushed, continuing.\r\n");
+
+    //2.Motor Initialization
+    PCA9685_Init(0x40);
+    PCA9685_Init(0x60);
+    PCA9685_SetPWMFreq(100);
+
+    //3.Motor Run
+    DEBUG("running it\r\n");
+    motorSetDir(MOTORB, FORWARD);
+    motorSetSpeed(MOTORB, 100); //max speed
+    DEV_Delay_ms(2000); //wait for 2 seconds
+
+    DEBUG("slowing it down\r\n");
+    //gradually slow down to 15%
+    for (int i = 100; i >= 15; i--) {
+        motorSetSpeed(MOTORB, i);
+        DEV_Delay_ms(50);
+    }
+    //stop for 1 second
+    motorStop(MOTORB);
+    DEV_Delay_ms(1000);
+    
+    //gradually accelerate to max reverse
+    motorSetDir(MOTORB, BACKWARD);
+    for (int j = 0; j <= 100; j++) {
+        motorSetSpeed(MOTORB, j);
+        DEV_Delay_ms(50);
+    }
+    
+    //4.System Exit
+    printf("\r\nEnd Reached: Motor Stop\r\n");
+    motorStop(MOTORA);
+    motorStop(MOTORB);
+    //DEV_GPIO_Unexport(PIN_BUTTON);
+    DEV_ModuleExit();
+    return 0;
+}
+
+void motorSetSpeed(UBYTE motor, UWORD speed) {
+    DEBUG("Setting motor speed.\r\n");
+    if (speed > 100) {
+        speed = 100;
+    }
+
+    if (motor == MOTORA) {
+        DEBUG("Motor A Speed = %d\r\n", speed);
+        PCA9685_SetPwmDutyCycle(PWMA, speed);
+    } else {
+        DEBUG("Motor B Speed = %d\r\n", speed);
+        PCA9685_SetPwmDutyCycle(PWMB, speed);
+    }
+}
+
+//dir should only be 1 or 0, forward or backward respectively.
+void motorSetDir(UBYTE motor, int dir) {
+    DEBUG("Setting motor direction.\r\n");
+
+    UBYTE chann1 = AIN1;
+    UBYTE chann2 = AIN2;
+    if (motor == MOTORA) {
+        DEBUG("Motor A ");
+    } else {
+        DEBUG("Motor B ");
+        chann1 = BIN1;
+        chann2 = BIN2;
+    }
+
+    if (dir) {
+        DEBUG("forward...\r\n");
+        PCA9685_SetLevel(BIN1, 0);
+        PCA9685_SetLevel(BIN2, 1);
+    }
+    else {
+        DEBUG("backward...\r\n");
+        PCA9685_SetLevel(BIN1, 1);
+        PCA9685_SetLevel(BIN2, 0);
+    }
+}
+
+void motorStop(UBYTE motor) {
+    if (motor == MOTORA) {
+        PCA9685_SetPwmDutyCycle(PWMA, 0);
+    } else {
+        PCA9685_SetPwmDutyCycle(PWMB, 0);
+    }
+}
+
+// Set up a memory regions to access GPIO
+void setup_io()
+{
+    /* open /dev/mem */
+    if ((mem_fd = open("/dev/mem", O_RDWR | O_SYNC)) < 0) {
+        printf("can't open /dev/mem \n");
+        exit(-1);
+    }
+
+    /* mmap GPIO */
+    gpio_map = mmap(
+        NULL,             //Any adddress in our space will do
+        BLOCK_SIZE,       //Map length
+        PROT_READ | PROT_WRITE,// Enable reading & writting to mapped memory
+        MAP_SHARED,       //Shared with other processes
+        mem_fd,           //File to map
+        GPIO_BASE         //Offset to GPIO peripheral
+    );
+
+    close(mem_fd); //No need to keep mem_fd open after mmap
+
+    if (gpio_map == MAP_FAILED) {
+        printf("mmap error %d\n", (int)gpio_map);//errno also set!
+        exit(-1);
+    }
+
+    // Always use volatile pointer!
+    gpio = (volatile unsigned*)gpio_map;
+
+
+}
+
+void sysExit(int signo) {
+    //System Exit
+    printf("\r\nHandler: Motor Stop\r\n");
+    motorStop(MOTORA);
+    motorStop(MOTORB);
+    DEV_ModuleExit();
+
+    exit(0);
+}
