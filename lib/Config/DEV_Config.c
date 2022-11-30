@@ -374,7 +374,6 @@ UBYTE DEV_ModuleInit(void)
 #endif
     GPIO_Config();
     DEV_I2C_Init(1, 0x29);
-    DEV_I2C_Init(2, 0x29);
     
     return 0;
 }
