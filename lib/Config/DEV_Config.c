@@ -267,9 +267,9 @@ void DEV_I2C_Init(int deviceNum, uint8_t Add)
         fd = wiringPiI2CSetup(Add);
         
     #elif USE_DEV_LIB
-        // printf("DEV I2C Device\r\n");
-        char * i2c_device = "/dev/i2c-";
-        char * deviceNumAsChar;
+        printf("DEV I2C Device\r\n");
+        char i2c_device[10] = "/dev/i2c-";
+        char deviceNumAsChar[2];
         sprintf(deviceNumAsChar, "%d", deviceNum+1);
         DEBUG("dev_i2c_init deviceNum: %s\r\n", deviceNumAsChar);
         strcat(i2c_device, deviceNumAsChar);

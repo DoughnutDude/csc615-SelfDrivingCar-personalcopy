@@ -99,7 +99,7 @@ Info:
 ******************************************************************************/
 void DEV_HARDWARE_I2C_setSlaveAddress(int deviceNum, uint8_t addr)
 {
-    DEBUG("setting address: %d\r\n", addr);
+    printf("setting address: %d\r\n", addr);
     if(ioctl(hardware_i2c[deviceNum].fd, I2C_SLAVE, addr) < 0)  {
         printf("Failed to access bus.\n");  
         exit(1);  
