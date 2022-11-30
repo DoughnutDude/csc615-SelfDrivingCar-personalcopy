@@ -51,6 +51,7 @@
 #include "dev_hardware_i2c.h"
 
 #include <stdio.h>
+#include <stdlib.h>   //exit()
 #include <fcntl.h>    //define O_RDWR  
 #include <linux/i2c-dev.h>  
 #include <sys/ioctl.h>
@@ -68,7 +69,6 @@ Info:   /dev/i2c-*
 ******************************************************************************/
 void DEV_HARDWARE_I2C_begin(int deviceNum, char *i2c_device)
 {
-    numOfDevices++;
     //device
     if((hardware_i2c[deviceNum].fd = open(i2c_device, O_RDWR)) < 0)  { //打开I2C 
         perror("Failed to open i2c device.\n");  
