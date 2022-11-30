@@ -55,37 +55,45 @@ int main(void) {
 
     //3.Motor Run
     DEBUG("running it\r\n");
-    motorSetDir(MOTORB, FORWARD);
-    motorSetSpeed(MOTORB, 100); //max speed
+    motorSetDir(1, MOTORB, FORWARD);
+    motorSetSpeed(1, MOTORB, 100); //max speed
+    motorSetDir(2, MOTORB, FORWARD);
+    motorSetSpeed(2, MOTORB, 100); //max speed
     DEV_Delay_ms(2000); //wait for 2 seconds
 
     DEBUG("slowing it down\r\n");
     //gradually slow down to 15%
     for (int i = 100; i >= 15; i--) {
-        motorSetSpeed(MOTORB, i);
+        motorSetSpeed(1, MOTORB, i);
+        motorSetSpeed(2, MOTORB, i);
         DEV_Delay_ms(50);
     }
     //stop for 1 second
-    motorStop(MOTORB);
+    motorStop(1, MOTORB);
+    motorStop(2, MOTORB);
     DEV_Delay_ms(1000);
     
     //gradually accelerate to max reverse
-    motorSetDir(MOTORB, BACKWARD);
+    motorSetDir(1, MOTORB, BACKWARD);
+    motorSetDir(2, MOTORB, BACKWARD);
     for (int j = 0; j <= 100; j++) {
-        motorSetSpeed(MOTORB, j);
+        motorSetSpeed(1, MOTORB, j);
+        motorSetSpeed(2, MOTORB, j);
         DEV_Delay_ms(50);
     }
     
     //4.System Exit
     printf("\r\nEnd Reached: Motor Stop\r\n");
-    motorStop(MOTORA);
-    motorStop(MOTORB);
+    motorStop(1, MOTORA);
+    motorStop(1, MOTORB);
+    motorStop(2, MOTORA);
+    motorStop(2, MOTORB);
     //DEV_GPIO_Unexport(PIN_BUTTON);
     DEV_ModuleExit();
     return 0;
 }
 
-void motorSetSpeed(UBYTE motor, UWORD speed) {
+void motorSetSpeed(int deviceNum, UBYTE motor, UWORD speed) {
     DEBUG("Setting motor speed.\r\n");
     if (speed > 100) {
         speed = 100;
@@ -93,15 +101,15 @@ void motorSetSpeed(UBYTE motor, UWORD speed) {
 
     if (motor == MOTORA) {
         DEBUG("Motor A Speed = %d\r\n", speed);
-        PCA9685_SetPwmDutyCycle(PWMA, speed);
+        PCA9685_SetPwmDutyCycle(deviceNum, PWMA, speed);
     } else {
         DEBUG("Motor B Speed = %d\r\n", speed);
-        PCA9685_SetPwmDutyCycle(PWMB, speed);
+        PCA9685_SetPwmDutyCycle(deviceNum, PWMB, speed);
     }
 }
 
 //dir should only be 1 or 0, forward or backward respectively.
-void motorSetDir(UBYTE motor, int dir) {
+void motorSetDir(int deviceNum, UBYTE motor, int dir) {
     DEBUG("Setting motor direction.\r\n");
 
     UBYTE chann1 = AIN1;
@@ -116,21 +124,21 @@ void motorSetDir(UBYTE motor, int dir) {
 
     if (dir) {
         DEBUG("forward...\r\n");
-        PCA9685_SetLevel(BIN1, 0);
-        PCA9685_SetLevel(BIN2, 1);
+        PCA9685_SetLevel(deviceNum, BIN1, 0);
+        PCA9685_SetLevel(deviceNum, BIN2, 1);
     }
     else {
         DEBUG("backward...\r\n");
-        PCA9685_SetLevel(BIN1, 1);
-        PCA9685_SetLevel(BIN2, 0);
+        PCA9685_SetLevel(deviceNum, BIN1, 1);
+        PCA9685_SetLevel(deviceNum, BIN2, 0);
     }
 }
 
-void motorStop(UBYTE motor) {
+void motorStop(int deviceNum, UBYTE motor) {
     if (motor == MOTORA) {
-        PCA9685_SetPwmDutyCycle(PWMA, 0);
+        PCA9685_SetPwmDutyCycle(deviceNum, PWMA, 0);
     } else {
-        PCA9685_SetPwmDutyCycle(PWMB, 0);
+        PCA9685_SetPwmDutyCycle(deviceNum, PWMB, 0);
     }
 }
 
@@ -169,8 +177,10 @@ void setup_io()
 void sysExit(int signo) {
     //System Exit
     printf("\r\nHandler: Motor Stop\r\n");
-    motorStop(MOTORA);
-    motorStop(MOTORB);
+    motorStop(1, MOTORA);
+    motorStop(1, MOTORB);
+    motorStop(2, MOTORA);
+    motorStop(2, MOTORB);
     DEV_ModuleExit();
 
     exit(0);
