@@ -267,14 +267,12 @@ void DEV_I2C_Init(int deviceNum, uint8_t Add)
         fd = wiringPiI2CSetup(Add);
         
     #elif USE_DEV_LIB
-        printf("DEV I2C Device\r\n");
-        char i2c_device[10] = "/dev/i2c-";
-        char deviceNumAsChar[2];
-        sprintf(deviceNumAsChar, "%d", deviceNum+1);
-        DEBUG("dev_i2c_init deviceNum: %s\r\n", deviceNumAsChar);
-        strcat(i2c_device, deviceNumAsChar);
+        printf("DEV I2C Device\r\n");/*
+        char i2c_device[11] = "";
+        sprintf(i2c_device, "/dev/i2c-1", deviceNum+1);
+        DEBUG("dev_i2c_init deviceNum: %s\r\n", deviceNumAsChar);*/
 
-        DEV_HARDWARE_I2C_begin(deviceNum, i2c_device);
+        DEV_HARDWARE_I2C_begin(deviceNum, "/dev/i2c-1");
         DEV_HARDWARE_I2C_setSlaveAddress(deviceNum, Add);
     #endif
 #endif
