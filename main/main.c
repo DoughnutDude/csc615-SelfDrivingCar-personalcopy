@@ -73,7 +73,7 @@ int main(void) {
     }
     
     //gradually accelerate only front wheels to max reverse
-    DEBUG("front wheels drive")
+    DEBUG("front wheels drive");
     motorSetDir(FRONT_WHEELS, MOTORA, BACKWARD);
     motorSetDir(FRONT_WHEELS, MOTORB, BACKWARD);
     for (int j = 0; j <= 100; j++) {
