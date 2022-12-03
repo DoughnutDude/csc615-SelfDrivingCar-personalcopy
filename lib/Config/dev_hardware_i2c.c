@@ -37,13 +37,9 @@
 * Github ID: DoughnutDude
 * Project: Term Project - Drive On
 *
-* File: DEV_Config.c
+* File: dev_hardware_iwc.c
 *
-* Description: DEV_Config functions are wrappers for the functions from the
-* other lower level files. They automatically determine which to use based
-* on which Makefile macro is set. The only changes made to this file and DEV_Config.h
-* should be the addition of an unexport function if using sysfs for GPIO. Also, commented
-* out the SPI stuff since for some reason they were giving compilation warnings.
+* Description: low level functions for reading and writing to the i2c device.
 * Sources referenced: https://www.waveshare.com/wiki/Motor_Driver_HAT
 *
 **************************************************************/
@@ -105,7 +101,7 @@ void DEV_HARDWARE_I2C_setSlaveAddress(int deviceNum, uint8_t addr)
         printf("Failed to access bus.\n");  
         exit(1);  
     }
-    printf("devnum%d fd: %d", deviceNum, hardware_i2c[deviceNum].fd)
+    printf("devnum%d fd: %d\r\n", deviceNum, hardware_i2c[deviceNum].fd);
 }
 
 /******************************************************************************

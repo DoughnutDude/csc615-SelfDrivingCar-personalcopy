@@ -46,7 +46,7 @@ int main(void) {
 
     //2.Motor Initialization
     PCA9685_Init(FRONT_WHEELS, 0x40);
-    PCA9685_Init(REAR_WHEELS, 0x50);
+    PCA9685_Init(REAR_WHEELS, 0x40);
     PCA9685_SetPWMFreq(FRONT_WHEELS, 100);
     PCA9685_SetPWMFreq(REAR_WHEELS, 100);
 
