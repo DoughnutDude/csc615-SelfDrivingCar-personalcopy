@@ -124,13 +124,13 @@ void motorSetDir(int deviceNum, UBYTE motor, int dir) {
 
     if (dir) {
         DEBUG("forward...\r\n");
-        PCA9685_SetLevel(deviceNum, BIN1, 0);
-        PCA9685_SetLevel(deviceNum, BIN2, 1);
+        PCA9685_SetLevel(deviceNum, chann1, 0);
+        PCA9685_SetLevel(deviceNum, chann2, 1);
     }
     else {
         DEBUG("backward...\r\n");
-        PCA9685_SetLevel(deviceNum, BIN1, 1);
-        PCA9685_SetLevel(deviceNum, BIN2, 0);
+        PCA9685_SetLevel(deviceNum, chann1, 1);
+        PCA9685_SetLevel(deviceNum, chann2, 0);
     }
 }
 
