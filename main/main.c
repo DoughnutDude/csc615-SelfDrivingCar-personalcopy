@@ -94,7 +94,7 @@ int main(void) {
 }
 
 void motorSetSpeed(int deviceNum, UBYTE motor, UWORD speed) {
-    DEBUG("Setting motor speed.\r\n");
+    DEBUG("%d Setting motor speed.\r\n", deviceNum);
     if (speed > 100) {
         speed = 100;
     }
@@ -110,7 +110,7 @@ void motorSetSpeed(int deviceNum, UBYTE motor, UWORD speed) {
 
 //dir should only be 1 or 0, forward or backward respectively.
 void motorSetDir(int deviceNum, UBYTE motor, int dir) {
-    DEBUG("Setting motor direction.\r\n");
+    DEBUG("%d Setting motor direction.\r\n", deviceNum);
 
     UBYTE chann1 = AIN1;
     UBYTE chann2 = AIN2;
