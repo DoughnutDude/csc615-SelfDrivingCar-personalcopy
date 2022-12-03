@@ -20,9 +20,9 @@
 
 int main(void) {
     //1.System Initialization
-    if (DEV_ModuleInit()) {
+    /*if (DEV_ModuleInit()) {
         exit(0);
-    }
+    }*/
     // Exception handling:ctrl + c
     signal(SIGINT, sysExit);
     
@@ -46,41 +46,43 @@ int main(void) {
 
     //2.Motor Initialization
     PCA9685_Init(FRONT_WHEELS, 0x40);
-    PCA9685_Init(REAR_WHEELS, 0x60);
+    PCA9685_Init(REAR_WHEELS, 0x50);
     PCA9685_SetPWMFreq(FRONT_WHEELS, 100);
     PCA9685_SetPWMFreq(REAR_WHEELS, 100);
 
     //3.Motor Run
-    DEBUG("running it\r\n");
+    //DEBUG("running it\r\n");
+    //motorSetDir(FRONT_WHEELS, MOTORB, FORWARD);
+    //motorSetSpeed(FRONT_WHEELS, MOTORB, 100);
+    //motorSetDir(FRONT_WHEELS, MOTORA, FORWARD);
+    //motorSetSpeed(FRONT_WHEELS, MOTORA, 100);
+    //motorSetDir(REAR_WHEELS, MOTORB, FORWARD);
+    //motorSetSpeed(REAR_WHEELS, MOTORB, 100);
+    //motorSetDir(REAR_WHEELS, MOTORA, FORWARD);
+    //motorSetSpeed(REAR_WHEELS, MOTORA, 100);
+    //DEV_Delay_ms(1000); //wait for 2 seconds
+
+    //DEBUG("slowing it down\r\n");
+    ////gradually slow down to 15%
+    //for (int i = 100; i >= 15; i--) {
+    //    motorSetSpeed(FRONT_WHEELS, MOTORA, i);
+    //    motorSetSpeed(FRONT_WHEELS, MOTORB, i);
+    //    motorSetSpeed(REAR_WHEELS, MOTORA, i);
+    //    motorSetSpeed(REAR_WHEELS, MOTORB, i);
+    //    DEV_Delay_ms(50);
+    //}
+    //
+    ////gradually accelerate only front wheels to max reverse
+    //DEBUG("front wheels drive");
+    //motorSetDir(FRONT_WHEELS, MOTORA, BACKWARD);
+    //motorSetDir(FRONT_WHEELS, MOTORB, BACKWARD);
+    //for (int j = 0; j <= 100; j++) {
+    //    motorSetSpeed(FRONT_WHEELS, MOTORA, j);
+    //    motorSetSpeed(FRONT_WHEELS, MOTORB, j);
+    //    DEV_Delay_ms(50);
+    //}
     motorSetDir(FRONT_WHEELS, MOTORB, FORWARD);
     motorSetSpeed(FRONT_WHEELS, MOTORB, 100);
-    motorSetDir(FRONT_WHEELS, MOTORA, FORWARD);
-    motorSetSpeed(FRONT_WHEELS, MOTORA, 100);
-    motorSetDir(REAR_WHEELS, MOTORB, FORWARD);
-    motorSetSpeed(REAR_WHEELS, MOTORB, 100);
-    motorSetDir(REAR_WHEELS, MOTORA, FORWARD);
-    motorSetSpeed(REAR_WHEELS, MOTORA, 100);
-    DEV_Delay_ms(1000); //wait for 2 seconds
-
-    DEBUG("slowing it down\r\n");
-    //gradually slow down to 15%
-    for (int i = 100; i >= 15; i--) {
-        motorSetSpeed(FRONT_WHEELS, MOTORA, i);
-        motorSetSpeed(FRONT_WHEELS, MOTORB, i);
-        motorSetSpeed(REAR_WHEELS, MOTORA, i);
-        motorSetSpeed(REAR_WHEELS, MOTORB, i);
-        DEV_Delay_ms(50);
-    }
-    
-    //gradually accelerate only front wheels to max reverse
-    DEBUG("front wheels drive");
-    motorSetDir(FRONT_WHEELS, MOTORA, BACKWARD);
-    motorSetDir(FRONT_WHEELS, MOTORB, BACKWARD);
-    for (int j = 0; j <= 100; j++) {
-        motorSetSpeed(FRONT_WHEELS, MOTORA, j);
-        motorSetSpeed(FRONT_WHEELS, MOTORB, j);
-        DEV_Delay_ms(50);
-    }
     
     //4.System Exit
     printf("\r\nEnd Reached: Motor Stop\r\n");
