@@ -105,6 +105,7 @@ void DEV_HARDWARE_I2C_setSlaveAddress(int deviceNum, uint8_t addr)
         printf("Failed to access bus.\n");  
         exit(1);  
     }
+    printf("devnum%d fd: %d", deviceNum, hardware_i2c[deviceNum].fd)
 }
 
 /******************************************************************************
