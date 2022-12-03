@@ -46,21 +46,12 @@ int main(void) {
 
     //2.Motor Initialization
     PCA9685_Init(FRONT_WHEELS, 0x40);
-    PCA9685_Init(REAR_WHEELS, 0x40);
+    PCA9685_Init(REAR_WHEELS, 0x40); //change to new address of 2nd motor driver hat
     PCA9685_SetPWMFreq(FRONT_WHEELS, 100);
     PCA9685_SetPWMFreq(REAR_WHEELS, 100);
 
     //3.Motor Run
     //DEBUG("running it\r\n");
-    //motorSetDir(FRONT_WHEELS, MOTORB, FORWARD);
-    //motorSetSpeed(FRONT_WHEELS, MOTORB, 100);
-    //motorSetDir(FRONT_WHEELS, MOTORA, FORWARD);
-    //motorSetSpeed(FRONT_WHEELS, MOTORA, 100);
-    //motorSetDir(REAR_WHEELS, MOTORB, FORWARD);
-    //motorSetSpeed(REAR_WHEELS, MOTORB, 100);
-    //motorSetDir(REAR_WHEELS, MOTORA, FORWARD);
-    //motorSetSpeed(REAR_WHEELS, MOTORA, 100);
-    //DEV_Delay_ms(1000); //wait for 2 seconds
 
     //DEBUG("slowing it down\r\n");
     ////gradually slow down to 15%
@@ -83,7 +74,8 @@ int main(void) {
     //}
     motorSetDir(FRONT_WHEELS, MOTORB, FORWARD);
     motorSetSpeed(FRONT_WHEELS, MOTORB, 100);
-    
+    DEV_Delay_ms(1000);
+
     //4.System Exit
     printf("\r\nEnd Reached: Motor Stop\r\n");
     motorStop(FRONT_WHEELS, MOTORA);
