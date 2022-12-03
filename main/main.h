@@ -37,10 +37,13 @@
 #define BIN1        PCA_CHANNEL_3
 #define BIN2        PCA_CHANNEL_4
 
-#define MOTORA      0
-#define MOTORB      1
-#define BACKWARD	0
-#define FORWARD		1
+
+#define FRONT_WHEELS	0
+#define REAR_WHEELS		1
+#define MOTORA			0
+#define MOTORB			1
+#define BACKWARD		0
+#define FORWARD			1
 
 #define BCM2708_PERI_BASE        0x20000000
 #define GPIO_BASE                (BCM2708_PERI_BASE + 0x200000) /* GPIO controller */
