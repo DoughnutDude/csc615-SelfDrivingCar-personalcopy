@@ -1,9 +1,9 @@
 /**************************************************************
 * Class: CSC-615-01 Fall 2022
 * Team Name: Data Pi-rats
-* Name: Cameron Yee
-* Student ID: 920699179
-* Github ID: DoughnutDude
+* Name: Cameron Yee, Elisa Chih
+* Student ID: 920699179, 920541866
+* Github ID: DoughnutDude, elisachih
 * Project: Term Project - Drive On
 *
 * File: main.c
@@ -11,12 +11,61 @@
 * Description: Contains the main driving logic
 * Sources referenced: https://www.waveshare.com/wiki/Motor_Driver_HAT
 * https://elinux.org/RPi_GPIO_Code_Samples#Direct_register_access
-*
+* https://elinux.org/RPi_GPIO_Code_Samples
+* https://abyz.me.uk/rpi/pigpio/ 
 **************************************************************/
 
 #include "main.h"
+#include <pthread.h>
+#include <unistd.h>
 
 #define PIN_BUTTON 17
+#define OBSTACLE_GPIO 23
+#define LINE_GPIO 24
+
+int _quit = 0;
+
+#define HIGH 1
+#define LOW 0
+int isObstacle = HIGH; // HIGH means no obstacle
+
+void *myThreadFunLine(void *vargp) {
+    // need to loop on the line sensor pin until a signal of 1 is received
+    // then, save the start time
+    while(_quit == 0) {
+        int read = GET_GPIO(LINE_GPIO);
+        if(read != LOW) {
+            printf("on the line\n");
+            // motorSetDir(FRONT_WHEELS, MOTORA, FOWARD);
+            // motorSetSpeed(FRONT_WHEELS, MOTORA, 100);
+        } else {
+            // motorSetDir(FRONT_WHEELS, MOTORA, BACKWARD);
+            // motorSetSpeed(FRONT_WHEELS, MOTORA, 100);
+            printf("off the line\n");
+        }
+        sleep(1);
+    }
+    return NULL;
+}
+
+void *myThreadFunObstacle(void *vargp) {
+    // need to loop on the obstacle pin until a signal of 0 is received
+    // then, save the start time
+    while(_quit == 0) {
+        int read = GET_GPIO(OBSTACLE_GPIO);
+        // is obstacle
+        if(read == LOW) {
+            printf("obstacle detected\n");
+            // motorSetDir(FRONT_WHEELS, MOTORA, FORWARD);
+            // motorSetSpeed(FRONT_WHEELS, MOTORA, 50);
+        } else {
+            // motorSetDir(FRONT_WHEELS, MOTORA, FORWARD);
+            // motorSetSpeed(FRONT_WHEELS, MOTORA, 100);
+        }
+        sleep(1);
+    }
+    return NULL;
+}
 
 int main(void) {
     //1.System Initialization
@@ -31,6 +80,9 @@ int main(void) {
 
     // Set GPIO button pin as input
     INP_GPIO(PIN_BUTTON);
+    INP_GPIO(OBSTACLE_GPIO);
+    INP_GPIO(LINE_GPIO);
+
     //DEV_GPIO_Mode(PIN_BUTTON, 0); //dev config stuff for sysfs GPIO
 
     DEBUG("setting pulldown: %d\r\n", GPIO_PULL);
@@ -74,7 +126,21 @@ int main(void) {
     //}
     motorSetDir(FRONT_WHEELS, MOTORB, FORWARD);
     motorSetSpeed(FRONT_WHEELS, MOTORB, 100);
-    DEV_Delay_ms(1000);
+    // DEV_Delay_ms(1000);
+
+    printf("start...");
+
+    pthread_t line_thread_id, obstacle_thread_id;
+    printf("before thread\n");
+    pthread_create(&line_thread_id, NULL, myThreadFunLine, NULL);
+    pthread_create(&obstacle_thread_id, NULL, myThreadFunObstacle, NULL);
+
+    char c = getchar();
+    _quit = 1;
+    pthread_join(line_thread_id, NULL);
+    pthread_join(obstacle_thread_id, NULL);
+
+    printf("after thread\n");
 
     //4.System Exit
     printf("\r\nEnd Reached: Motor Stop\r\n");

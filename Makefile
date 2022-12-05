@@ -1,9 +1,9 @@
 ###############################################################
 # Class: CSC-615-01 Fall 2022
 # Team Name: Data Pi-rats
-# Name:	Cameron Yee
-# Student ID: 920699179
-# Github ID: DoughnutDude
+# Name:	Cameron Yee, Elisa Chih
+# Student ID: 920699179, 920541866
+# Github ID: DoughnutDude, elisachih
 # Project: Term Project - Drive On
 #
 # File: Makefile
@@ -41,7 +41,7 @@ else ifeq ($(USELIB), USE_WIRINGPI_LIB)
 endif
 
 ${TARGET}:${OBJ_O}
-	$(CC) $(CFLAGS) $(OBJ_O) -o $@ $(LIB) -lm
+	$(CC) $(CFLAGS) $(OBJ_O) -o $@ $(LIB) -lm -pthread -lpigpio -lrt
 
 ${DIR_BIN}/%.o : $(DIR_Main)/%.c
 	$(CC) $(CFLAGS) -c  $< -o $@ $(LIB) -I $(DIR_OBJ) -I $(DIR_Config) -I $(DIR_PCA9685)
@@ -55,6 +55,8 @@ ${DIR_BIN}/%.o : $(DIR_Config)/%.c
 ${DIR_BIN}/%.o : $(DIR_PCA9685)/%.c
 	$(CC) $(CFLAGS) -c  $< -o $@ $(LIB) -I $(DIR_Config)
 
+run: $(ROOTNAME)
+	sudo ./$(TARGET)
 
 clean :
 	rm $(DIR_BIN)/*.* 
