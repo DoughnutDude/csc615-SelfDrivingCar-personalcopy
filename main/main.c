@@ -95,15 +95,20 @@ int main(void) {
     GPIO_PULL = 0;
     GPIO_PULLCLK0 = 0;
 
+    printf("waiting for button...\r\n");
+    while (GET_GPIO(PIN_BUTTON) == 0) {
+    }
+    DEBUG("button pushed, continuing.\r\n");
+
 
     //2.Motor Initialization
     PCA9685_Init(FRONT_WHEELS, 0x40);
-    PCA9685_Init(REAR_WHEELS, 0x40); //change to new address of 2nd motor driver hat
+    PCA9685_Init(REAR_WHEELS, 0x54); //change to new address of 2nd motor driver hat
     PCA9685_SetPWMFreq(FRONT_WHEELS, 100);
     PCA9685_SetPWMFreq(REAR_WHEELS, 100);
 
     //3.Motor Run
-    //DEBUG("running it\r\n");
+    DEBUG("running it\r\n");
 
     //DEBUG("slowing it down\r\n");
     ////gradually slow down to 15%
@@ -126,7 +131,13 @@ int main(void) {
     //}
     motorSetDir(FRONT_WHEELS, MOTORB, FORWARD);
     motorSetSpeed(FRONT_WHEELS, MOTORB, 100);
-    // DEV_Delay_ms(1000);
+    motorSetDir(FRONT_WHEELS, MOTORA, FORWARD);
+    motorSetSpeed(FRONT_WHEELS, MOTORA, 100);
+    DEV_Delay_ms(5000);
+    DEBUG("stopping");
+    motorStop(FRONT_WHEELS, MOTORA);
+    motorStop(FRONT_WHEELS, MOTORB);
+
 
     printf("start...");
 
@@ -148,7 +159,6 @@ int main(void) {
     motorStop(FRONT_WHEELS, MOTORB);
     motorStop(REAR_WHEELS, MOTORA);
     motorStop(REAR_WHEELS, MOTORB);
-    //DEV_GPIO_Unexport(PIN_BUTTON);
     DEV_ModuleExit();
     return 0;
 }
