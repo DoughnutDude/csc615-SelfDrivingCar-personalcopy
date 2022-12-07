@@ -19,7 +19,6 @@
 #include <pthread.h>
 #include <unistd.h>
 
-#define PIN_BUTTON 17
 #define OBSTACLE_GPIO 23
 #define LINE_GPIO 24
 
@@ -34,6 +33,7 @@ void *myThreadFunLine(void *vargp) {
     // then, save the start time
     while(_quit == 0) {
         int read = GET_GPIO(LINE_GPIO);
+        DEBUG("line sensor: %d\r\n", read);
         if(read != LOW) {
             printf("on the line\n");
             // motorSetDir(FRONT_WHEELS, MOTORA, FOWARD);
@@ -53,6 +53,7 @@ void *myThreadFunObstacle(void *vargp) {
     // then, save the start time
     while(_quit == 0) {
         int read = GET_GPIO(OBSTACLE_GPIO);
+        DEBUG("%d\r\n", read);
         // is obstacle
         if(read == LOW) {
             printf("obstacle detected\n");
@@ -69,9 +70,9 @@ void *myThreadFunObstacle(void *vargp) {
 
 int main(void) {
     //1.System Initialization
-    /*if (DEV_ModuleInit()) {
+    if (DEV_ModuleInit()) {
         exit(0);
-    }*/
+    }
     // Exception handling:ctrl + c
     signal(SIGINT, sysExit);
     
@@ -79,7 +80,6 @@ int main(void) {
     setup_io();
 
     // Set GPIO button pin as input
-    INP_GPIO(PIN_BUTTON);
     INP_GPIO(OBSTACLE_GPIO);
     INP_GPIO(LINE_GPIO);
 
@@ -88,17 +88,17 @@ int main(void) {
     DEBUG("setting pulldown: %d\r\n", GPIO_PULL);
 
     // Set pi GPIO pull to pulldown
-    GPIO_PULL = 1; // set the type of pull we want, 1 = pulldown
-    usleep(10); // wait 150 cycles
-    GPIO_PULLCLK0 = 1<<PIN_BUTTON; // signify which pin which receives the pulldown change
-    usleep(10); // wait 150 cycles
-    GPIO_PULL = 0;
-    GPIO_PULLCLK0 = 0;
+    //GPIO_PULL = 1; // set the type of pull we want, 1 = pulldown
+    //usleep(10); // wait 150 cycles
+    //GPIO_PULLCLK0 = 1<<PIN_BUTTON; // signify which pin which receives the pulldown change
+    //usleep(10); // wait 150 cycles
+    //GPIO_PULL = 0;
+    //GPIO_PULLCLK0 = 0;
 
-    printf("waiting for button...\r\n");
+    /*printf("waiting for button...\r\n");
     while (GET_GPIO(PIN_BUTTON) == 0) {
     }
-    DEBUG("button pushed, continuing.\r\n");
+    DEBUG("button pushed, continuing.\r\n");*/
 
 
     //2.Motor Initialization
