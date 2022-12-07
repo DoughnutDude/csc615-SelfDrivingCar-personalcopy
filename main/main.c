@@ -19,8 +19,8 @@
 #include <pthread.h>
 #include <unistd.h>
 
-#define OBSTACLE_GPIO 23
-#define LINE_GPIO 24
+#define OBSTACLE_GPIO 17
+#define LINE_GPIO 27
 
 int _quit = 0;
 
@@ -36,7 +36,7 @@ void *myThreadFunLine(void *vargp) {
         DEBUG("line sensor: %d\r\n", read);
         if(read != LOW) {
             printf("on the line\n");
-            // motorSetDir(FRONT_WHEELS, MOTORA, FOWARD);
+            // motorSetDir(FRONT_WHEELS, MOTORA, FORWARD);
             // motorSetSpeed(FRONT_WHEELS, MOTORA, 100);
         } else {
             // motorSetDir(FRONT_WHEELS, MOTORA, BACKWARD);
