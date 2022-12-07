@@ -79,21 +79,19 @@ int main(void) {
     // Set up gpi pointer for direct register access
     setup_io();
 
-    // Set GPIO button pin as input
+    // Set GPIO pin as input
     INP_GPIO(OBSTACLE_GPIO);
     INP_GPIO(LINE_GPIO);
 
     //DEV_GPIO_Mode(PIN_BUTTON, 0); //dev config stuff for sysfs GPIO
 
-    DEBUG("setting pulldown: %d\r\n", GPIO_PULL);
-
     // Set pi GPIO pull to pulldown
-    //GPIO_PULL = 1; // set the type of pull we want, 1 = pulldown
-    //usleep(10); // wait 150 cycles
-    //GPIO_PULLCLK0 = 1<<PIN_BUTTON; // signify which pin which receives the pulldown change
-    //usleep(10); // wait 150 cycles
-    //GPIO_PULL = 0;
-    //GPIO_PULLCLK0 = 0;
+    GPIO_PULL = 1; // set the type of pull we want, 1 = pulldown
+    usleep(10); // wait 150 cycles
+    GPIO_PULLCLK0 = 1<<LINE_GPIO | 1<<OBSTACLE_GPIO; // signify which pin which receives the pulldown change
+    usleep(10); // wait 150 cycles
+    GPIO_PULL = 0;
+    GPIO_PULLCLK0 = 0;
 
     /*printf("waiting for button...\r\n");
     while (GET_GPIO(PIN_BUTTON) == 0) {
@@ -133,6 +131,8 @@ int main(void) {
     motorSetSpeed(FRONT_WHEELS, MOTORB, 100);
     motorSetDir(FRONT_WHEELS, MOTORA, FORWARD);
     motorSetSpeed(FRONT_WHEELS, MOTORA, 100);
+    motorSetDir(REAR_WHEELS, MOTORA, FORWARD);
+    motorSetSpeed(REAR_WHEELS, MOTORA, 100);
     DEV_Delay_ms(5000);
     DEBUG("stopping");
     motorStop(FRONT_WHEELS, MOTORA);
