@@ -71,6 +71,9 @@ extern volatile unsigned* gpio;
 #define SPEED_NORMAL 45
 #define SPEED_SLOW   40
 
+#define DRIFT_LEFT_SLEEP 1
+#define RIGHT_REAR_SLEEP 1 
+
 void motorInit();
 void motorSetSpeed(int, UBYTE, UWORD);
 void motorSetDir(int, UBYTE, int);

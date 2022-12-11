@@ -194,7 +194,7 @@ void *myThreadFunMain(void *vargp) {
         // we will continue to drift for 1 second
         if (_isObstacle == NO && _isRightFrontObstacle == YES && state == DRIFT_TO_LEFT) { 
             DriftLeft();
-            sleep(1);
+            sleep(DRIFT_LEFT_SLEEP);
             continue;
         }                
         // if there are no more obstacles, and we are still in drifting state, 
@@ -220,7 +220,7 @@ void *myThreadFunMain(void *vargp) {
             // we will continue forward for 1 second, and stop
             // and set the state to be ready to drift to the right
             if (_rearObstacleDistance > 20 && _isRightRearObstacleYet == YES) {
-                sleep(1);
+                sleep(RIGHT_REAR_SLEEP);
                 motorStopAll();
                 state = DRIFT_TO_RIGHT;
                 _isRightRearObstacleYet = NO;
