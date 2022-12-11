@@ -168,29 +168,29 @@ void turnRight() {
 }
 
 void DriftLeft() {
-    motorSetDir(FRONT_WHEELS, MOTORB, FORWARD); // right
-    motorSetSpeed(FRONT_WHEELS, MOTORB, SPEED_NORMAL + 20 );
+    motorSetDir(FRONT_WHEELS, MOTORB, FORWARD); // front right
+    motorSetSpeed(FRONT_WHEELS, MOTORB, SPEED_SLOW );
 
     motorSetDir(FRONT_WHEELS, MOTORA, BACKWARD); // left
-    motorSetSpeed(FRONT_WHEELS, MOTORA, SPEED_NORMAL+ 20 );
+    motorSetSpeed(FRONT_WHEELS, MOTORA, SPEED_SLOW );
 
-    motorSetDir(REAR_WHEELS, MOTORB, BACKWARD); // right
-    motorSetSpeed(REAR_WHEELS, MOTORB, SPEED_NORMAL+ 40 );
+    motorSetDir(REAR_WHEELS, MOTORB, BACKWARD); // rear right
+    motorSetSpeed(REAR_WHEELS, MOTORB, SPEED_SLOW );
 
-    motorSetDir(REAR_WHEELS, MOTORA, FORWARD); // left
-    motorSetSpeed(REAR_WHEELS, MOTORA, SPEED_NORMAL + 40 );       
+    motorSetDir(REAR_WHEELS, MOTORA, FORWARD); // rear left
+    motorSetSpeed(REAR_WHEELS, MOTORA, SPEED_SLOW);       
 }
 
 void DriftRight() {
-    motorSetDir(FRONT_WHEELS, MOTORB, BACKWARD); // right
-    motorSetSpeed(FRONT_WHEELS, MOTORB, SPEED_NORMAL + 20 );
+    motorSetDir(FRONT_WHEELS, MOTORB, BACKWARD); // front right
+    motorSetSpeed(FRONT_WHEELS, MOTORB, SPEED_SLOW );
 
     motorSetDir(FRONT_WHEELS, MOTORA, FORWARD); // left
-    motorSetSpeed(FRONT_WHEELS, MOTORA, SPEED_NORMAL + 20 );
+    motorSetSpeed(FRONT_WHEELS, MOTORA, SPEED_SLOW );
 
-    motorSetDir(REAR_WHEELS, MOTORB, FORWARD); // right
-    motorSetSpeed(REAR_WHEELS, MOTORB, SPEED_NORMAL + 40 );
+    motorSetDir(REAR_WHEELS, MOTORB, FORWARD); // rear right
+    motorSetSpeed(REAR_WHEELS, MOTORB, SPEED_SLOW );
 
     motorSetDir(REAR_WHEELS, MOTORA, BACKWARD); // left
-    motorSetSpeed(REAR_WHEELS, MOTORA, SPEED_NORMAL + 40 );           
+    motorSetSpeed(REAR_WHEELS, MOTORA, SPEED_SLOW );           
 }

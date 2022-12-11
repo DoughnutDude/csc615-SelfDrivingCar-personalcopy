@@ -21,8 +21,9 @@
 #include <pthread.h>
 #include "motorcontroller.h"
 
-
-#define OBSTACLE_GPIO 23
+#define OBSTACLE_RR_GPIO 21
+#define OBSTACLE_CENTER_GPIO 23
+#define OBSTACLE_RF_GPIO 24
 #define LINE_LEFT_GPIO 17
 #define LINE_RIGHT_GPIO 27
 
@@ -34,8 +35,12 @@ int _quit = 0;
 #define YES 1
 #define NO 0
 
+int _isRightFrontObstacle = NO;
+int _isRightRearObstacle = NO;
+int _isRightRearObstacleYet = NO;
 int _isObstacle = NO;
 int _isRightOnLine = NO;
+int _isRightOnLineYet = NO;
 int _isLeftOnLine = NO; 
 int _isDrifting = NO;
 
@@ -89,7 +94,7 @@ void *myThreadFunLine(void *vargp) {
 void *myThreadFunObstacle(void *vargp) {
 
     while(_quit == 0) {
-        int read = gpioRead(OBSTACLE_GPIO);
+        int read = gpioRead(OBSTACLE_CENTER_GPIO);
         DEBUG("%d\r\n", read);
         // is obstacle
         if(read == LOW) {
@@ -98,6 +103,28 @@ void *myThreadFunObstacle(void *vargp) {
         } else {
             _isObstacle = NO;
         }
+
+        read = gpioRead(OBSTACLE_RR_GPIO);
+        DEBUG("%d\r\n", read);
+        // is obstacle
+        if(read == LOW) {
+            printf("Right Rear obstacle detected\n");
+            _isRightRearObstacle = YES;
+        } else {
+            _isRightRearObstacle = NO;
+        }
+
+        read = gpioRead(OBSTACLE_RF_GPIO);
+        DEBUG("%d\r\n", read);
+        // is obstacle
+        if(read == LOW) {
+            printf("Right Front obstacle detected\n");
+            _isRightFrontObstacle = YES;
+        } else {
+            _isRightFrontObstacle = NO;
+        }
+        
+
         sleep(0.2);
     }
     return NULL;
@@ -106,24 +133,53 @@ void *myThreadFunObstacle(void *vargp) {
 void *myThreadFunMain(void *vargp) {
 
     while(_quit == 0) {
-        if (_isObstacle == YES) {
+        if (_isObstacle == YES && _isDrifting == NO) { 
             motorStopAll();
+            sleep(1);
             _isDrifting = YES;
             DriftLeft();
-            sleep(1);
+            //sleep(2);
+        } 
+        else if (_isObstacle == NO && _isDrifting == YES) {
+            if (_isRightFrontObstacle == NO) {
 
-        } else if (_isDrifting == YES) {
-            //goForward(30);
-            motorStopAll();
-            sleep(0.5);
-            DriftRight();
-            sleep(1);
-        } else {
+                if (_isRightRearObstacle == YES) {
+                    _isRightRearObstacleYet = YES;
+                    sleep(1);
+                } else {
+                    if (_isRightRearObstacleYet == YES) {
+                        if (_isRightOnLine == YES) {
+                            _isRightOnLineYet = YES;
+                        }
+                        if (_isRightOnLineYet == NO) {
+                            DriftRight();
+                        } else {
+                            sleep(0.5);
+                            _isRightOnLineYet = NO;
+                            _isDrifting = NO;       
+                            _isRightRearObstacleYet = NO;
+                        }
+                    } else {
+                        sleep(0.5);
+                        goForward(40);
+                    }
+                }
+
+            } else {
+                DriftLeft();
+                sleep(1);
+                goForward(SPEED_SLOW);
+            }
+            // sleep(1);
+        }
+        else if (_isObstacle == YES && _isDrifting == YES) { 
+        }
+        else {
             if (_isLeftOnLine == YES && _isRightOnLine == YES) {
-                goForward(30);
+                goForward(SPEED_SLOW);
                 sleep(0.5);
                 if (_isLeftOnLine == YES && _isRightOnLine == YES) {
-                    goForward(30);
+                    goForward(SPEED_SLOW);
                     sleep(0.5);                
                 }
 
@@ -172,8 +228,14 @@ int main(void) {
 
     // Set GPIO pin as input
       // Set the GPIO 
-    if (gpioGetMode(OBSTACLE_GPIO) != PI_INPUT)
-        gpioSetMode(OBSTACLE_GPIO, PI_INPUT); 
+    if (gpioGetMode(OBSTACLE_CENTER_GPIO) != PI_INPUT)
+        gpioSetMode(OBSTACLE_CENTER_GPIO, PI_INPUT); 
+
+    if (gpioGetMode(OBSTACLE_RF_GPIO) != PI_INPUT)
+        gpioSetMode(OBSTACLE_RF_GPIO, PI_INPUT); 
+
+    if (gpioGetMode(OBSTACLE_RR_GPIO) != PI_INPUT)
+        gpioSetMode(OBSTACLE_RR_GPIO, PI_INPUT); 
 
     // set the GPIO 
     if (gpioGetMode(LINE_RIGHT_GPIO) != PI_INPUT)
