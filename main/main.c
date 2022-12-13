@@ -211,7 +211,7 @@ void *myThreadFunMain(void *vargp) {
         if (state == DRIFT_TO_FORWARD) {
             // if the rear right detects an obstalce, we will mark
             // it as entering obstacle.
-            if (_rearObstacleDistance <= 20 && _isRightRearObstacleYet ==  NO) { 
+            if (_rearObstacleDistance <= 10 && _isRightRearObstacleYet ==  NO) { 
                 _isRightRearObstacleYet = YES;
             } 
             // if there are no more obstacles at the rear right and
@@ -219,7 +219,7 @@ void *myThreadFunMain(void *vargp) {
             // this means we have cleared the back
             // we will continue forward for 1 second, and stop
             // and set the state to be ready to drift to the right
-            if (_rearObstacleDistance > 20 && _isRightRearObstacleYet == YES) {
+            if (_rearObstacleDistance > 10 && _isRightRearObstacleYet == YES) {
                 sleep(RIGHT_REAR_SLEEP);
                 motorStopAll();
                 state = DRIFT_TO_RIGHT;
