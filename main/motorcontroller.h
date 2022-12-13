@@ -68,8 +68,8 @@ extern volatile unsigned* gpio;
 #define GPIO_PULL *(gpio+37) // Pull up/pull down
 #define GPIO_PULLCLK0 *(gpio+38) // Pull up/pull down clock
 
-#define SPEED_NORMAL 45
-#define SPEED_SLOW   40
+#define SPEED_NORMAL 55
+#define SPEED_SLOW   50
 
 #define DRIFT_LEFT_SLEEP 1
 #define RIGHT_REAR_SLEEP 1 
