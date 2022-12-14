@@ -8,7 +8,7 @@
 *
 * File: motorcontroller.c
 *
-* Description: Contains the main driving logic
+* Description: Contains the main driving logic for the motors.
 
 * Sources referenced: https://www.waveshare.com/wiki/Motor_Driver_HAT
 * https://elinux.org/RPi_GPIO_Code_Samples#Direct_register_access
