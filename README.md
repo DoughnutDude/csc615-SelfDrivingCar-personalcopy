@@ -1,7 +1,11 @@
 # DoughnutDude's personal copy of Mini Self Driving Car Project
-Link to video demo [here](https://www.youtube.com/watch?v=cTMO0VngxHw&ab_channel=AwzumMusic).
+This project had us assemble and program a simple version of a self-driving car using a Raspberry Pi 4 connected to various motor and sensor components.
 
-Documentation/team report found [here](https://github.com/DoughnutDude/csc615-termproject-personalcopy/blob/cbe0546cc5c475a5c8f43684b5cb3f7d9dec3d77/CSC615.01%20-%20Data%20Pi-rats%20Team%20Report.pdf).
+| [Video Demo Link](https://www.youtube.com/watch?v=cTMO0VngxHw&ab_channel=AwzumMusic)|
+|:---:|
+
+| [Documentation/Team Report](https://github.com/DoughnutDude/csc615-termproject-personalcopy/blob/cbe0546cc5c475a5c8f43684b5cb3f7d9dec3d77/CSC615.01%20-%20Data%20Pi-rats%20Team%20Report.pdf)|
+|:---:|
 
 Original Project Description/Details below:
 ## CSC615 Group Term Project
